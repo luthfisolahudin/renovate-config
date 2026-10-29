@@ -20,7 +20,7 @@ Add this to a repository's `renovate.json`:
 - Automerge non-major dev dependency updates only after CI passes.
 - Require manual approval for major updates.
 - Follow Node.js LTS releases; Renovate treats a new major as stable only once it reaches LTS.
-- Group GitHub Actions updates and pin them to commit digests.
+- Pin GitHub Actions to full commit SHAs and keep the released version in a trailing comment.
 - Refresh lock files monthly.
 - Security updates bypass the release-age check.
 
