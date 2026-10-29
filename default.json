@@ -1,0 +1,53 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":semanticCommits"],
+  "timezone": "Asia/Jakarta",
+  "schedule": ["before 9am on monday"],
+  "minimumReleaseAge": "7 days",
+  "internalChecksFilter": "strict",
+  "separateMajorMinor": true,
+  "separateMultipleMajor": true,
+  "pinDigests": true,
+  "platformAutomerge": false,
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 9am on the first day of the month"]
+  },
+  "packageRules": [
+    {
+      "description": "Pinning an existing tag to its digest does not change the version",
+      "matchUpdateTypes": ["pinDigest"],
+      "minimumReleaseAge": null
+    },
+    {
+      "description": "Require manual approval for major updates",
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true
+    },
+    {
+      "description": "Follow Node.js LTS releases, not current majors",
+      "matchManagers": ["nodenv", "nvm"],
+      "matchPackageNames": ["node"],
+      "versioning": "node"
+    },
+    {
+      "description": "Group GitHub Actions updates into one PR",
+      "matchManagers": ["github-actions"],
+      "groupName": "github actions"
+    },
+    {
+      "description": "Automerge non-major dev dependency updates once CI passes",
+      "matchDepTypes": ["devDependencies", "dependency-groups"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "groupName": "dev dependencies (non-major)",
+      "automerge": true
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["security"]
+  },
+  "osvVulnerabilityAlerts": true
+}
