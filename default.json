@@ -1,6 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", ":semanticCommits"],
+  "extends": [
+    "config:recommended",
+    ":semanticCommits",
+    "helpers:pinGitHubActionDigestsToSemver"
+  ],
   "timezone": "Asia/Jakarta",
   "schedule": ["before 9am on monday"],
   "minimumReleaseAge": "7 days",
@@ -27,10 +31,11 @@
       "dependencyDashboardApproval": true
     },
     {
-      "description": "Follow Node.js LTS releases, not current majors",
-      "matchManagers": ["nodenv", "nvm"],
-      "matchPackageNames": ["node"],
-      "versioning": "node"
+      "description": "Node moves along LTS lines only; .node-version is the one pin.",
+      "matchManagers": ["nodenv"],
+      "matchDepNames": ["node"],
+      "versioning": "node",
+      "groupName": "Node.js"
     },
     {
       "description": "Group GitHub Actions updates into one PR",
@@ -43,6 +48,22 @@
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "groupName": "dev dependencies (non-major)",
       "automerge": true
+    },
+    {
+      "description": "Container node images move with .node-version.",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["node", "docker.io/library/node"],
+      "groupName": "Node.js"
+    },
+    {
+      "description": "devEngines.packageManager and the ghcr.io/pnpm/pnpm image move together.",
+      "matchPackageNames": ["pnpm", "ghcr.io/pnpm/pnpm"],
+      "groupName": "pnpm"
+    },
+    {
+      "description": "Tools pinned in mise.toml (task, betterleaks, ...) move together; Node and pnpm come from .node-version and devEngines.",
+      "matchManagers": ["mise"],
+      "groupName": "mise tools"
     }
   ],
   "vulnerabilityAlerts": {
